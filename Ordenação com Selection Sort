@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    long long comparacoes;
+    long long trocas;
+} Metrics;
+
+static void print_array(const int v[], int n) {
+    printf("[");
+    for (int i = 0; i < n; i++) {
+        printf("%d", v[i]);
+        if (i < n - 1) printf(", ");
+    }
+    printf("]");
+}
+
+static void swap_int(int *a, int *b) {
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+/*
+ SelectionSort
+ - ordem =  1 → crescente
+ - ordem = -1 → decrescente
+*/
+void selectionSort(int v[], int n, int ordem, Metrics *metrics) {
+    for (int i = 0; i < n - 1; i++) {
+        int idxEscolhido = i;
+
+        for (int j = i + 1; j < n; j++) {
+            metrics->comparacoes++;
+
+            if (ordem == 1) { // crescente → menor
+                if (v[j] < v[idxEscolhido]) {
+                    idxEscolhido = j;
+                }
+            } else { // decrescente → maior
+                if (v[j] > v[idxEscolhido]) {
+                    idxEscolhido = j;
+                }
+            }
+        }
+
+        if (idxEscolhido != i) {
+            swap_int(&v[i], &v[idxEscolhido]);
+            metrics->trocas++;
+        }
+    }
+}
+
+int main() {
+    int v[] = {64, 25, 12, 22, 11};
+    int n = sizeof(v) / sizeof(v[0]);
+
+    Metrics metrics = {0, 0};
+
+    printf("Array original: ");
+    print_array(v, n);
+    printf("\n");
+
+    selectionSort(v, n, 1, &metrics); // crescente
+
+    printf("Ordenado (crescente): ");
+    print_array(v, n);
+    printf("\nComparacoes: %lld\nTrocas: %lld\n",
+           metrics.comparacoes, metrics.trocas);
+
+    return 0;
+}
