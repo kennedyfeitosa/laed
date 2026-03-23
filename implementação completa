@@ -1,0 +1,88 @@
+#include <stdio.h>
+
+/Função para imprimir o vetor.
+
+void imprimeVetor(int *V, int n){
+    int i;
+    for(i = 0; i < n; i++){
+        printf("%d ", V[i]);
+    }
+    printf("\n");
+}
+
+/Função de partição do QuickSort.
+
+int particiona (int *V, int inicio, int final) {
+
+    int esq, dir, pivo, aux;
+
+    esq = inicio;
+    dir = final;
+    pivo = V[inicio];
+
+    while (esq < dir) {
+
+        while (esq <= final && V[esq] <= pivo)
+            esq++;
+
+        while (dir >= 0 && pivo < V[dir])
+            dir--;
+
+        if (esq < dir) {
+            aux = V[esq];
+            V[esq] = V[dir];
+            V[dir] = aux;
+        }
+    }
+
+    V[inicio] = V[dir];
+    V[dir] = pivo;
+
+    return dir;
+}
+
+/Função QuickSort
+
+void quickSort(int *V, int inicio, int fim, int tamanho) {
+
+    int pivo;
+
+    if (fim > inicio) {
+
+        pivo = particiona(V, inicio, fim);
+
+        printf("Pivo posicionado em %d -> ", pivo);
+        imprimeVetor(V, tamanho);
+
+        quickSort(V, inicio, pivo - 1, tamanho);
+        quickSort(V, pivo + 1, fim, tamanho);
+    }
+}
+
+int main() {
+
+    int n, i;
+
+    printf("Digite o tamanho do vetor: ");
+    scanf("%d", &n);
+
+    int V[n];
+
+    printf("Digite os elementos do vetor:\n");
+
+    for(i = 0; i < n; i++){
+        scanf("%d", &V[i]);
+    }
+
+    printf("\nVetor original:\n");
+    imprimeVetor(V, n);
+
+    printf("\nExecucao do QuickSort:\n");
+
+    quickSort(V, 0, n-1, n);
+
+    printf("\nVetor ordenado:\n");
+    imprimeVetor(V, n);
+
+    return 0;
+}
