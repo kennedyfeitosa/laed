@@ -72,18 +72,11 @@ void bubbleSortOptimizado(int v[], int n){
             }
         }
 
-        // Se não houve troca, vetor já está ordenado
         if(!houveTroca){
             break;
         }
     }
 }
-
-/*
-EXPLICAÇÃO:
-Sem otimização → sempre executa n-1 passadas → O(n²)
-Com early stop → se já estiver ordenado, para na primeira passada → O(n)
-*/
 
 // 5) BUBBLE COM ORDEM
 
@@ -151,16 +144,8 @@ void selectionSortInstrumentado(int *V, int n){
     printf("Comparacoes: %d | Trocas: %d\n", comparacoes, trocas);
 }
 
-/*
-EXPLICAÇÃO:
-Selection sempre faz o mesmo número de comparações:
-(n-1) + (n-2) + ... + 1 = O(n²)
-→ independe da ordem inicial → comportamento constante
-*/
-
-// =========================
 // 10) SELECTION SORT ORDENADO
-// =========================
+
 void selectionSortOrdem(int *V, int n, int ordem){
     int i, j, escolhido, aux;
 
@@ -199,9 +184,8 @@ void insertionSort(int *V, int n){
     }
 }
 
-// =========================
 // 13) INSERCTION INSTRUMENTADO
-// =========================
+
 void insertionSortInstrumentado(int *V, int n){
     int i, j, chave;
     int comparacoes = 0, movimentacoes = 0;
@@ -228,14 +212,6 @@ void insertionSortInstrumentado(int *V, int n){
 
     printf("Comparacoes: %d | Movimentacoes: %d\n", comparacoes, movimentacoes);
 }
-
-/*
-EXPLICAÇÃO:
-- Melhor caso (ordenado): O(n)
-- Pior caso (reverso): O(n²)
-- Quase ordenado: desempenho MUITO bom
-*/
-
 
 // GERADORES DE VETORES
 
