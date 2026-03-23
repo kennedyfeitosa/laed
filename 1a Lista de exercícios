@@ -1,0 +1,315 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define N 20
+
+// FUNÇÃO AUXILIAR
+
+void imprime(int v[], int n){
+    for(int i=0;i<n;i++)
+        printf("%d ", v[i]);
+    printf("\n");
+}
+
+void copia(int origem[], int destino[], int n){
+    for(int i=0;i<n;i++)
+        destino[i] = origem[i];
+}
+
+// 1) BUBBLE SORT BÁSICO
+
+void bubbleSort(int v[], int n){
+    int i, j, aux;
+
+    for(i=0;i<n-1;i++){
+        for(j=0;j<n-1-i;j++){
+            if(v[j] > v[j+1]){
+                aux = v[j];
+                v[j] = v[j+1];
+                v[j+1] = aux;
+            }
+        }
+    }
+}
+
+// 2) BUBBLE INSTRUMENTADO
+
+void bubbleSortInstrumentado(int v[], int n){
+    int i, j, aux;
+    int comparacoes = 0, trocas = 0;
+
+    for(i=0;i<n-1;i++){
+        for(j=0;j<n-1-i;j++){
+            comparacoes++;
+            if(v[j] > v[j+1]){
+                aux = v[j];
+                v[j] = v[j+1];
+                v[j+1] = aux;
+                trocas++;
+            }
+        }
+    }
+
+    printf("Comparacoes: %d | Trocas: %d\n", comparacoes, trocas);
+}
+
+// 3) BUBBLE COM EARLY STOP
+
+void bubbleSortOptimizado(int v[], int n){
+    int i, j, aux;
+    int houveTroca;
+
+    for(i=0;i<n-1;i++){
+        houveTroca = 0;
+
+        for(j=0;j<n-1-i;j++){
+            if(v[j] > v[j+1]){
+                aux = v[j];
+                v[j] = v[j+1];
+                v[j+1] = aux;
+                houveTroca = 1;
+            }
+        }
+
+        // Se não houve troca, vetor já está ordenado
+        if(!houveTroca){
+            break;
+        }
+    }
+}
+
+/*
+EXPLICAÇÃO:
+Sem otimização → sempre executa n-1 passadas → O(n²)
+Com early stop → se já estiver ordenado, para na primeira passada → O(n)
+*/
+
+// 5) BUBBLE COM ORDEM
+
+void bubbleSortOrdem(int v[], int n, int ordem){
+    int i, j, aux;
+
+    for(i=0;i<n-1;i++){
+        for(j=0;j<n-1-i;j++){
+
+            if( (ordem == 1 && v[j] > v[j+1]) ||
+                (ordem == -1 && v[j] < v[j+1]) ){
+
+                aux = v[j];
+                v[j] = v[j+1];
+                v[j+1] = aux;
+            }
+        }
+    }
+}
+
+// 6) SELECTION SORT
+
+void selectionSort(int *V, int n){
+    int i, j, menor, aux;
+
+    for(i=0;i<n-1;i++){
+        menor = i;
+
+        for(j=i+1;j<n;j++){
+            if(V[j] < V[menor]){
+                menor = j;
+            }
+        }
+
+        aux = V[i];
+        V[i] = V[menor];
+        V[menor] = aux;
+    }
+}
+
+// 8) SELECTION INSTRUMENTADO
+
+void selectionSortInstrumentado(int *V, int n){
+    int i, j, menor, aux;
+    int comparacoes = 0, trocas = 0;
+
+    for(i=0;i<n-1;i++){
+        menor = i;
+
+        for(j=i+1;j<n;j++){
+            comparacoes++;
+            if(V[j] < V[menor]){
+                menor = j;
+            }
+        }
+
+        if(menor != i){
+            aux = V[i];
+            V[i] = V[menor];
+            V[menor] = aux;
+            trocas++;
+        }
+    }
+
+    printf("Comparacoes: %d | Trocas: %d\n", comparacoes, trocas);
+}
+
+/*
+EXPLICAÇÃO:
+Selection sempre faz o mesmo número de comparações:
+(n-1) + (n-2) + ... + 1 = O(n²)
+→ independe da ordem inicial → comportamento constante
+*/
+
+// =========================
+// 10) SELECTION SORT ORDENADO
+// =========================
+void selectionSortOrdem(int *V, int n, int ordem){
+    int i, j, escolhido, aux;
+
+    for(i=0;i<n-1;i++){
+        escolhido = i;
+
+        for(j=i+1;j<n;j++){
+            if( (ordem == 1 && V[j] < V[escolhido]) ||
+                (ordem == -1 && V[j] > V[escolhido]) ){
+                escolhido = j;
+            }
+        }
+
+        aux = V[i];
+        V[i] = V[escolhido];
+        V[escolhido] = aux;
+    }
+}
+
+// =========================
+// 11) INSERTION SORT
+// =========================
+void insertionSort(int *V, int n){
+    int i, j, chave;
+
+    for(i=1;i<n;i++){
+        chave = V[i];
+        j = i;
+
+        while(j > 0 && chave < V[j-1]){
+            V[j] = V[j-1];
+            j--;
+        }
+
+        V[j] = chave;
+    }
+}
+
+// =========================
+// 13) INSERCTION INSTRUMENTADO
+// =========================
+void insertionSortInstrumentado(int *V, int n){
+    int i, j, chave;
+    int comparacoes = 0, movimentacoes = 0;
+
+    for(i=1;i<n;i++){
+        chave = V[i];
+        j = i;
+
+        while(j > 0){
+            comparacoes++;
+
+            if(chave < V[j-1]){
+                V[j] = V[j-1];
+                movimentacoes++;
+                j--;
+            } else {
+                break;
+            }
+        }
+
+        V[j] = chave;
+        movimentacoes++;
+    }
+
+    printf("Comparacoes: %d | Movimentacoes: %d\n", comparacoes, movimentacoes);
+}
+
+/*
+EXPLICAÇÃO:
+- Melhor caso (ordenado): O(n)
+- Pior caso (reverso): O(n²)
+- Quase ordenado: desempenho MUITO bom
+*/
+
+
+// GERADORES DE VETORES
+
+void gerarOrdenado(int v[]){
+    for(int i=0;i<N;i++)
+        v[i] = i;
+}
+
+void gerarReverso(int v[]){
+    for(int i=0;i<N;i++)
+        v[i] = N-i;
+}
+
+void gerarAleatorio(int v[]){
+    for(int i=0;i<N;i++)
+        v[i] = rand()%100;
+}
+
+
+// MAIN
+
+int main(){
+
+    int v1[N], v2[N];
+
+    srand(time(NULL));
+
+    printf("\n===== TESTE BUBBLE =====\n");
+
+    gerarOrdenado(v1);
+    copia(v1,v2,N);
+    printf("\nOrdenado:\n");
+    bubbleSortInstrumentado(v1,N);
+    bubbleSortOptimizado(v2,N);
+
+    gerarReverso(v1);
+    copia(v1,v2,N);
+    printf("\nReverso:\n");
+    bubbleSortInstrumentado(v1,N);
+    bubbleSortOptimizado(v2,N);
+
+    gerarAleatorio(v1);
+    copia(v1,v2,N);
+    printf("\nAleatorio:\n");
+    bubbleSortInstrumentado(v1,N);
+    bubbleSortOptimizado(v2,N);
+
+    printf("\n===== TESTE SELECTION SORT =====\n");
+
+    gerarOrdenado(v1);
+    printf("\nOrdenado:\n");
+    selectionSortInstrumentado(v1,N);
+
+    gerarReverso(v1);
+    printf("\nReverso:\n");
+    selectionSortInstrumentado(v1,N);
+
+    gerarAleatorio(v1);
+    printf("\nAleatorio:\n");
+    selectionSortInstrumentado(v1,N);
+
+    printf("\n===== TESTE INSERCTION SORT =====\n");
+
+    gerarOrdenado(v1);
+    printf("\nOrdenado:\n");
+    insertionSortInstrumentado(v1,N);
+
+    gerarReverso(v1);
+    printf("\nReverso:\n");
+    insertionSortInstrumentado(v1,N);
+
+    gerarAleatorio(v1);
+    printf("\nAleatorio:\n");
+    insertionSortInstrumentado(v1,N);
+
+    return 0;
+}
